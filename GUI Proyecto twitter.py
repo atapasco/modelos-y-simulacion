@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import random
 import sys
 import io
 from PyQt5 import uic
@@ -24,35 +25,42 @@ from Tweepy import Twitts
 tweets = Twitts()
 
 TextTwitts = []
-
+Twittsverificados = 15
 
 
 class Gui(QMainWindow):
-        validar = 0
-        def __init__(self):
-                super().__init__()
-                uic.loadUi("GUI Proyecto twitter.ui", self)
-                self.grafica = Canvas_grafica()
-                self.grafica1 = Canvas_grafica2()
-                self.pushButton.clicked.connect(self.activar)
-        def activar(self):
-                tweets.twittsPorSemana(self.lineEdit.text()).clear()
-                self.listWidget.clear()
-                self.listWidget.insertItems(1,tweets.twittsPorSemana(self.lineEdit.text()))
-                self.label_13.setText(str(tweets.twittsTotales()))
-                self.verticalLayout_5.addWidget(self.grafica1)
-                self.verticalLayout_4.addWidget(self.grafica)
-                coordinate = (10.45, -73.25)
-                m = folium.Map(tiles='Stamen Terrain',zoom_start=13,location=coordinate)
+    validar = 0
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("GUI Proyecto twitter.ui", self)
+        self.grafica = Canvas_grafica()
+        self.grafica1 = Canvas_grafica2()
+        self.pushButton.clicked.connect(self.activar)
 
-                data = io.BytesIO()
-                m.save(data, close_file=False)
+    def activar(self):
+        
+        tweets.twittsPorSemana(self.lineEdit.text()).clear()
+                
+        self.listWidget.clear()
+        self.listWidget.insertItems(1,tweets.twittsPorSemana(self.lineEdit.text()))
+        self.label_13.setText(str(tweets.twittsTotales()))
+        
+        self.label_10.setText('23')
+        self.label_11.setText('27')
+        self.label_12.setText(str(Twittsverificados))
+        self.verticalLayout_5.addWidget(self.grafica1)
+        self.verticalLayout_4.addWidget(self.grafica)
+        coordinate = (10.45, -73.25)
+        m = folium.Map(tiles='Stamen Terrain',zoom_start=13,location=coordinate)
 
-                webView = QWebEngineView()
-                webView.setHtml(data.getvalue().decode())
-                if self.validar == 0:
-                        self.verticalLayout_2.addWidget(webView,0)
-                        self.validar = 1
+        data = io.BytesIO()
+        m.save(data, close_file=False)
+
+        webView = QWebEngineView()
+        webView.setHtml(data.getvalue().decode())
+        if self.validar == 0:
+            self.verticalLayout_2.addWidget(webView,0)
+            self.validar = 1
                         
 
 
@@ -65,7 +73,7 @@ class Canvas_grafica(FigureCanvas):
 
         nombres = ['lun', 'mar', 'mie', 'jue','vie','sab','dom']
         colores = ['red','red','red','red', 'red', 'red', 'red']
-        tamaño = [10, 15, 20, 25, 30, 90 ,40]
+        tamaño = [2334, 9900, 4323, 12000, 1000, 3890 ,4990]
 
         self.ax.bar(nombres, tamaño, color = colores)
         self.fig.suptitle('Grafica de Barras',size=11)
@@ -76,10 +84,11 @@ class Canvas_grafica2(FigureCanvas):
             sharey=True, facecolor='white')
         super().__init__(self.fig) 
 
-        nombres = ['positivos', 'negativos', 'verificados']
-        colores = ['green','red','cyan']
-        tamaño = [40, 40, 10]
-        explotar = [0.05, 0.05, 0.05] 
+
+        nombres = ['positivos', 'negativos']
+        colores = ['green','red']
+        tamaño = [23, 27]
+        explotar = [0.05, 0.05] 
 
         plt.title("grafica de torta",
             color='black',size=9, family="Arial")
@@ -87,7 +96,7 @@ class Canvas_grafica2(FigureCanvas):
         self.ax.pie(tamaño, explode = explotar, labels = nombres, 
             colors = colores,
                 autopct = '%1.0f%%', pctdistance = 0.6,
-                shadow=True, startangle=90, radius = 0.8, 
+                shadow=True, startangle=50, radius = 0.8, 
                 labeldistance=1.1)  
         self.ax.axis('equal')
 
@@ -99,7 +108,7 @@ class Canvas_grafica(FigureCanvas):
 
         nombres = ['lun', 'mar', 'mie', 'jue','vie','sab','dom']
         colores = ['red','red','red','red', 'red', 'red', 'red']
-        tamaño = [10, 15, 20, 25, 30, 90 ,40]
+        tamaño = [2334, 9900, 4323, 12000, 1000, 3890 ,4990]
 
         self.ax.bar(nombres, tamaño, color = colores)
         self.fig.suptitle('Grafica de Barras',size=11)
